@@ -1,8 +1,9 @@
-// TODO: Create button for universal use
-const Button = () => {
+const Button = ({ onClick, children }) => {
   return (
-    <div>Button</div>
-  )
-}
+    <button onClick={onClick}>
+      {children}
+    </button>
+  );
+};
 
-export default Button
+export default Button;
