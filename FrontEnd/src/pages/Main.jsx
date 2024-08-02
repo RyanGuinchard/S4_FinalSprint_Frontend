@@ -38,7 +38,7 @@ const Main = () => {
 
   return (
     <div className="container">
-      <h1>Welcome to DecisionForge</h1>
+      <h1 className='text-4xl'>Welcome to DecisionForge</h1>
       <p>Get started by selecting a game to randomize your choices.</p>
       <div>
         {games.map(game => (
