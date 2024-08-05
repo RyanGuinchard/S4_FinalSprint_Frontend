@@ -1,73 +1,44 @@
-import { useEffect, useState } from 'react';
-import Button from '../components/Button';
-import { getAllGames, getCategoriesByGameId, getOptionsByCategoryId } from '../services/mockApi';
+import { useState, useEffect } from "react";
+import NavPanel from "../components/NavPanel";
 
 const Main = () => {
   const [games, setGames] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [options, setOptions] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
+
+  // Update for production on AWS, using local for dev
   useEffect(() => {
-    getAllGames().then(response => setGames(response.data));
+    fetch('http://localhost:8080/games')
+      .then(response => response.json())
+      .then(data => setGames(data))
+      .catch(err => console.error('Error fetching full game list: ' + err));
   }, []);
 
-  const fetchCategories = (gameId) => {
-    setSelectedGame(gameId);
-    getCategoriesByGameId(gameId).then(response => {
-      setCategories(response.data);
-      setOptions([]); // Clear options when a new game is selected
-      setSelectedOption(null); // Clear selected option when a new game is selected
-    });
-  };
+  const filteredGames = games.filter(game => game.title.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  const fetchOptions = (categoryId) => {
-    setSelectedCategory(categoryId);
-    getOptionsByCategoryId(categoryId).then(response => {
-      setOptions(response.data);
-      selectRandomOption(response.data);
-    });
-  };
-
-  const selectRandomOption = (options) => {
-    const randomIndex = Math.floor(Math.random() * options.length);
-    setSelectedOption(options[randomIndex]);
-  };
 
   return (
-    <div className="container">
-      <h1 className='text-4xl'>Welcome to DecisionForge</h1>
-      <p>Get started by selecting a game to randomize your choices.</p>
-      <div>
-        {games.map(game => (
-          <Button key={game.id} onClick={() => fetchCategories(game.id)}>{game.title}</Button>
+    <>
+ <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
+      <div className="text-center mb-8">
+        <h1 className="text-5xl font-extrabold mb-2">Welcome to DecisionForge</h1>
+        <p className="text-xl mb-6">Get started by selecting a game to randomize your choices.</p>
+        <input
+          type="text"
+          placeholder="Search games..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full max-w-md px-4 py-2 text-gray-900 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      
+      <div className="flex flex-wrap justify-center gap-4">
+        {filteredGames.map(game => (
+          <NavPanel key={game.id} title={game.title} gameId={game.id} />
         ))}
       </div>
-      {categories.length > 0 && (
-        <>
-          <h2>Categories</h2>
-          <div>
-            {categories.map(category => (
-              <Button key={category.id} onClick={() => fetchOptions(category.id)}>{category.category_name}</Button>
-            ))}
-          </div>
-        </>
-      )}
-      {options.length > 0 && (
-        <div>
-          <h2>Options</h2>
-          <ul>
-            {options.map(option => (
-              <li key={option.id} className={option.id === selectedOption?.id ? 'selected' : ''}>
-                {option.option_name}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
+    </>
   );
 };
 
