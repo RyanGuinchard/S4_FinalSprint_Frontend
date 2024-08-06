@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const NavPanel = ({ title, gameId }) => {
   return (
@@ -13,7 +13,7 @@ const NavPanel = ({ title, gameId }) => {
 
 NavPanel.propTypes = {
   title: PropTypes.string.isRequired,
-  gameId: PropTypes.string.isRequired,
+  gameId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired, // Update to accept string or number
 };
 
 export default NavPanel;
