@@ -1,11 +1,12 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 function AdminLogin() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
+        console.log("Attempting to login with:", username, password);
         try {
             const response = await axios.post('http://localhost:8080/admin/login', new URLSearchParams({
                 username: username,
@@ -17,6 +18,8 @@ function AdminLogin() {
                 withCredentials: true,
             });
 
+            console.log('response:', response);
+            
             if (response.status === 200) {
                 window.location.href = '/admin';
             }
