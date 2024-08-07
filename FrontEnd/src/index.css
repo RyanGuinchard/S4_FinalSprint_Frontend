@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* src/index.css or your main CSS file */
+.animate-pulse {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
 /* Reset some default browser styles
 html, body, div, span, applet, object, iframe,
