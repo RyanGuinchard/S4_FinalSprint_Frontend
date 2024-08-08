@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import BackButton from '../components/BackButton'; // Import the BackButton component
 import CategoryPanel from "../components/CategoryPanel";
 
 const Game = () => {
   const { id } = useParams();
   const [game, setGame] = useState(null);
-  const navigate = useNavigate();
-
 
   // Update this for production when on AWS
   useEffect(() => {
@@ -21,14 +20,9 @@ const Game = () => {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
+    <div className="relative flex flex-col items-center min-h-screen bg-gray-900 text-white p-4">
+      <BackButton />
       <div className="relative w-full flex items-center justify-center mb-8">
-        <button
-          onClick={() => navigate("/")}
-          className="absolute left-10 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-200"
-        >
-          Back to Home
-        </button>
         <h1 className="text-4xl font-bold">{game.title}</h1>
       </div>
 
